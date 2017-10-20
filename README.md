@@ -1,5 +1,5 @@
 # Codename: Judah
-Supply chain web application with Solidity, React, Web3, and Truffle.  Currently just for learning.
+Supply chain web application with Solidity, React, Web3, and Truffle.  Just for learning.
 
 Install Dependencies and :
 ```sh
