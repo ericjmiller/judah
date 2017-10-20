@@ -1,36 +1,33 @@
 import React, { Component } from 'react'
-import { Menu } from 'semantic-ui-react'
-import UnitManager from '../build/contracts/UnitManager.json'
-import getWeb3 from './utils/getWeb3'
 
-import './css/oswald.css'
-import './css/open-sans.css'
-//import './css/pure-min.css'
+import UnitManager from '../../build/contracts/UnitManager.json'
+import getWeb3 from '../utils/getWeb3'
+import Dispenser from './Dispenser'
+import Manufacturer from './Manufacturer'
+import Packager from './Packager'
+import Nav from './Nav'
+
 import 'semantic-ui-css/semantic.min.css'
 import './App.css'
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      storageValue: 0,
-      web3: null,
-      role: null
-    }
+  state = {
+    storageValue: 0,
+    web3: null,
+    activeItem: null,
+    activeScreen: null,
+    activeAccount: null
   }
 
   componentWillMount() {
-    // Get network provider and web3 instance.
-    // See utils/getWeb3 for more info.
-
     getWeb3
     .then(results => {
       this.setState({
-        web3: results.web3
+        web3: results.web3,
+        activeAccount: results.web3.eth.accounts[0]
       })
 
-      // Instantiate contract once web3 provided.
+
       this.instantiateContract()
     })
     .catch(() => {
@@ -70,32 +67,30 @@ class App extends Component {
 //    })
   }
 
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name})
+    if (name === 'manufacturer') this.setState({activeScreen: <Manufacturer />})
+    else if (name === 'packager') this.setState({activeScreen: <Packager />})
+    else this.setState({activeScreen: <Dispenser />})
+  }
+
+
   render() {
+    // const { activeItem } = this.state.activeItem
+
     return (
       <div className="App">
-        <Menu>
-          <Menu.Item header>Our Company</Menu.Item>
-          <Menu.Item header>Our Company</Menu.Item>
-        </Menu>
-        <nav className="ui fixed pointing secondary menu">
-            <a className="logo header item">MEDCHAIN</a>
-            <a href="#"
-              className="item"
-              onClick={() => this.setState({role: "Manufacturer"})}
-              >Manufacturer</a>
-            <a href="#"
-              className="item"
-              onClick={() => this.setState({role: "Packager"})}
-              >Packager</a>
-            <a href="#"
-              className="item"
-              onClick={() => this.setState({role: "Dispenser"})}
-              >Dispenser</a>
-        </nav>
+        <Nav
+          handleItemClick={this.handleItemClick}
+          activeItem={this.state.activeItem}
+        />
 
-        <main className="ui main text container">
-          {this.state.role}
-        </main>
+        <div className="ui main text container">
+          {this.state.activeAccount}
+        </div>
+        <div className="ui main text container">
+          {this.state.activeScreen}
+        </div>
       </div>
     );
   }
