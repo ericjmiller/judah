@@ -44,25 +44,22 @@ export default class Dispenser extends Component {
     this.setState({unitManager: unitManager})
     console.log(this.state.unitManager)
 
-  //   var unitManagerInstance
-   //
-  //  // Get accounts.
-  //  this.state.web3.eth.getAccounts((error, accounts) => {
-  //    unitManager.deployed().then((instance) => {
-  //      unitManagerInstance = instance
-   //
-  //      return unitManagerInstance.setRole()
-  //    })
-//
-//        // Stores a given value, 5 by default.
-//        return simpleStorageInstance.set(5, {from: accounts[0]})
-//      }).then((result) => {
-//        // Get the value from the contract to prove it worked.
-//        return simpleStorageInstance.get.call(accounts[0])
-//      }).then((result) => {
-//        // Update state with the result.
-//        return this.setState({ storageValue: result.c[0] })
-//    })
+    console.log('accounts 0: ' + this.state.web3.eth.accounts[0])
+    console.log('accounts 1: ' + this.state.web3.eth.accounts[1])
+    console.log('accounts 2: ' + this.state.web3.eth.accounts[2])
+
+    // var unitManagerInstance
+    // this.state.web3.eth.getAccounts((error, accounts) => {
+    //   unitManager.deployed().then((instance) => {
+    //     unitManagerInstance = instance
+    //
+    //     return unitManagerInstance.setRole(this.state.web3.eth.accounts[0], 2, {from: this.state.web3.eth.accounts[0]}).then( () => {
+    //       unitManagerInstance.getRole(this.state.web3.eth.accounts[0]).then( (result) => {
+    //         console.log('getRole: ' + result)
+    //       })
+    //     })
+    //   })
+    // })
   }
 
 
