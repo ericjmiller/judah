@@ -45,8 +45,7 @@ export default class Dispenser extends Component {
     console.log(this.state.unitManager)
 
     console.log('accounts 0: ' + this.state.web3.eth.accounts[0])
-    console.log('accounts 1: ' + this.state.web3.eth.accounts[1])
-    console.log('accounts 2: ' + this.state.web3.eth.accounts[2])
+    console.log('coinbase: ' + this.state.web3.eth.coinbase)
 
     // var unitManagerInstance
     // this.state.web3.eth.getAccounts((error, accounts) => {
@@ -80,9 +79,14 @@ export default class Dispenser extends Component {
         unitManagerInstance = instance
 
         return unitManagerInstance.getHash(this.state.submittedSerial, this.state.submittedGtin,
-          this.state.submittedPh1, this.state.submittedPh2).then( result => {
-            console.log('hash: ' + result)
-            this.setState({hash: result})
+          this.state.submittedPh1, this.state.submittedPh2)
+          .then( hash => {
+            console.log('hash: ' + hash)
+            this.setState({hash: hash})
+            unitManagerInstance.commissionUnit(hash, {from: this.state.web3.eth.coinbase})
+            .then( () => {
+              unitManagerInstance.unitExists(hash)
+            })
           })
       })
     })
