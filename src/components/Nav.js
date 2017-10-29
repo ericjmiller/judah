@@ -9,7 +9,7 @@ export default class Nav extends Component {
 
         <Menu.Item
           name='manufacturer'
-          active={this.propsactiveItem === 'manufacturer'}
+          active={this.props.activeItem === 'manufacturer'}
           onClick={this.props.handleItemClick}
           >
             Manufacturer

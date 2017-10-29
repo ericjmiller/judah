@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import UnitManager from '../../build/contracts/UnitManager.json'
+// import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
 import Dispenser from './Dispenser'
 import Manufacturer from './Manufacturer'
@@ -16,7 +16,8 @@ class App extends Component {
     web3: null,
     activeItem: null,
     activeScreen: null,
-    activeAccount: null
+    activeAccount: null,
+    accountMain: "0x960e5Be89BdAC0a428153622901BCECb3EcF952A"
   }
 
   componentWillMount() {
@@ -43,9 +44,9 @@ class App extends Component {
      * state management library, but for convenience I've placed them here.
      */
 
-    const contract = require('truffle-contract')
-    const unitManager = contract(UnitManager)
-    unitManager.setProvider(this.state.web3.currentProvider)
+    // const contract = require('truffle-contract')
+    // const unitManager = contract(UnitManager)
+    // unitManager.setProvider(this.state.web3.currentProvider)
 
 //    // Declaring this for later so we can chain functions on SimpleStorage.
 //    var unitManagerInstance
@@ -69,9 +70,9 @@ class App extends Component {
 
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name})
-    if (name === 'manufacturer') this.setState({activeScreen: <Manufacturer />})
-    else if (name === 'packager') this.setState({activeScreen: <Packager />})
-    else this.setState({activeScreen: <Dispenser />})
+    if (name === 'manufacturer') this.setState({activeScreen: <Manufacturer accountMain={this.state.accountMain}/>})
+    else if (name === 'packager') this.setState({activeScreen: <Packager accountMain={this.state.accountMain}/>})
+    else this.setState({activeScreen: <Dispenser accountMain={this.state.accountMain}/>})
   }
 
 

@@ -3,21 +3,25 @@ import { Button, Form } from 'semantic-ui-react'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
+import * as client from '../utils/contractClient.js'
 
 
 export default class Dispenser extends Component {
   state = {
     web3: null,
     serial: '',
-    gtin: '',
-    ph1: '',
-    ph2: '',
     submittedSerial: '',
+    gtin: '',
     submittedGtin: '',
+    ph1: '',
     submittedPh1: '',
+    ph2: '',
     submittedPh2: '',
+    role: '',
+    submittedRole: '',
     unitManager: null,
-    hash: ''
+    hash: '',
+    accountMain: this.props.accountMain
   }
 
   componentWillMount() {
@@ -25,7 +29,7 @@ export default class Dispenser extends Component {
     .then(results => {
       this.setState({
         web3: results.web3,
-        activeAccount: results.web3.eth.accounts[0]
+        // activeAccount: results.web3.eth.accounts[0]
       })
 
 
@@ -42,10 +46,6 @@ export default class Dispenser extends Component {
     unitManager.setProvider(this.state.web3.currentProvider)
 
     this.setState({unitManager: unitManager})
-    console.log(this.state.unitManager)
-
-    console.log('accounts 0: ' + this.state.web3.eth.accounts[0])
-    console.log('coinbase: ' + this.state.web3.eth.coinbase)
 
     // var unitManagerInstance
     // this.state.web3.eth.getAccounts((error, accounts) => {
@@ -62,47 +62,48 @@ export default class Dispenser extends Component {
   }
 
 
+  // form field changes
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
-  handleSubmit = () => {
-    const { serial, gtin, ph1, ph2 } = this.state
+  handleRoleSubmit = () => {
+    const { role } = this.state
+    this.setState({submittedRole: role})
 
+    client.setRole(this, this.state.unitManager, [this.state.web3.eth.accounts[0], parseInt(role, 10)])
+  }
+
+  // form submit
+  handlePackageSubmit = () => {
+    const { serial, gtin, ph1, ph2 } = this.state
     this.setState({ submittedSerial: serial, submittedGtin: gtin, submittedPh1: ph1, submittedPh2:ph2 })
 
-    var unitManagerInstance
+    // var unitManagerInstance
 
     console.log(this.state.web3)
-    this.state.web3.eth.getAccounts((error, accounts) => {
-      console.log('accounts: ' + accounts)
-      this.state.unitManager.deployed().then((instance) => {
-        console.log('instance: ' + instance)
-        unitManagerInstance = instance
-
-        return unitManagerInstance.getHash(this.state.submittedSerial, this.state.submittedGtin,
-          this.state.submittedPh1, this.state.submittedPh2)
-          .then( hash => {
-            console.log('hash: ' + hash)
-            this.setState({hash: hash})
-            unitManagerInstance.commissionUnit(hash, {from: this.state.web3.eth.coinbase})
-            .then( () => {
-              unitManagerInstance.unitExists(hash)
-            })
-          })
-      })
-    })
+    client.getHash(this, this.state.unitManager, [this.state.serial, this.state.gtin, this.state.ph1, this.state.ph2])
   }
 
   render () {
-    const { serial, gtin, ph1, ph2 } = this.state
+    const { serial, gtin, ph1, ph2, role } = this.state
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Input label="Serial Number" name="serial" value={serial} onChange={this.handleChange} />
-        <Form.Input label="GTIN" name="gtin" value={gtin} onChange={this.handleChange} />
-        <Form.Input label="PH1" name="ph1" value={ph1} onChange={this.handleChange} />
-        <Form.Input label="PH2" name="ph2" value={ph2} onChange={this.handleChange} />
-        <Button type='submit'>Submit</Button>
-      </Form>
+      <div className="container">
+        <h1>Packager</h1>
+        <Form onSubmit={this.handleRoleSubmit}>
+          <Form.Input label="Role" name="role" value={role} onChange={this.handleChange} />
+          <Button type='submit'>Set Role</Button>
+        </Form>
+        <Form onSubmit={this.handlePackageSubmit}>
+          <Form.Input label="Serial Number" name="serial" value={serial} onChange={this.handleChange} />
+          <Form.Input label="GTIN" name="gtin" value={gtin} onChange={this.handleChange} />
+          <Form.Input label="PH1" name="ph1" value={ph1} onChange={this.handleChange} />
+          <Form.Input label="PH2" name="ph2" value={ph2} onChange={this.handleChange} />
+          <Button type='submit'>Submit</Button>
+        </Form>
+        <div className="hash">
+          <p>{this.state.hash}</p>
+        </div>
+      </div>
     )
   }
 }
