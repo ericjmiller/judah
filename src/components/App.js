@@ -25,15 +25,25 @@ class App extends Component {
     .then(results => {
       this.setState({
         web3: results.web3,
-        activeAccount: results.web3.eth.accounts[0]
+        activeAccount: results.web3.eth.accounts[0],
       })
 
+      // must constantly query metamask because it doesn't automatically update
+      setInterval( () => {
+        results.web3.eth.getAccounts( (err, res) => {
+          this.setState({activeAccount: res})
+        })
+      }, 1000)
 
       this.instantiateContract()
     })
     .catch(() => {
       console.log('Error finding web3.')
     })
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.activeAccount2)
   }
 
   instantiateContract() {
@@ -70,9 +80,9 @@ class App extends Component {
 
   handleItemClick = (e, { name }) => {
     this.setState({ activeItem: name})
-    if (name === 'manufacturer') this.setState({activeScreen: <Manufacturer accountMain={this.state.accountMain}/>})
-    else if (name === 'packager') this.setState({activeScreen: <Packager accountMain={this.state.accountMain}/>})
-    else this.setState({activeScreen: <Dispenser accountMain={this.state.accountMain}/>})
+    if (name === 'manufacturer') this.setState({activeScreen: <Manufacturer activeAccount={this.state.activeAccount} accountMain={this.state.accountMain}/>})
+    else if (name === 'packager') this.setState({activeScreen: <Packager activeAccount={this.state.activeAccount} accountMain={this.state.accountMain}/>})
+    else this.setState({activeScreen: <Dispenser activeAccount={this.state.activeAccount} accountMain={this.state.accountMain}/>})
   }
 
 
@@ -87,7 +97,7 @@ class App extends Component {
         />
 
         <div className="ui main text container">
-          {this.state.activeAccount}
+          <p>{this.state.activeAccount}</p>
         </div>
         <div className="ui main text container">
           {this.state.activeScreen}

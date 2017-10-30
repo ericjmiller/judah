@@ -29,7 +29,6 @@ export default class Dispenser extends Component {
     .then(results => {
       this.setState({
         web3: results.web3,
-        // activeAccount: results.web3.eth.accounts[0]
       })
 
 
@@ -46,25 +45,13 @@ export default class Dispenser extends Component {
     unitManager.setProvider(this.state.web3.currentProvider)
 
     this.setState({unitManager: unitManager})
-
-    // var unitManagerInstance
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    //   unitManager.deployed().then((instance) => {
-    //     unitManagerInstance = instance
-    //
-    //     return unitManagerInstance.setRole(this.state.web3.eth.accounts[0], 2, {from: this.state.web3.eth.accounts[0]}).then( () => {
-    //       unitManagerInstance.getRole(this.state.web3.eth.accounts[0]).then( (result) => {
-    //         console.log('getRole: ' + result)
-    //       })
-    //     })
-    //   })
-    // })
   }
 
 
   // form field changes
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
+  // set role: should only be set to 5 (dispensary) in this component
   handleRoleSubmit = () => {
     const { role } = this.state
     this.setState({submittedRole: role})
@@ -72,15 +59,14 @@ export default class Dispenser extends Component {
     client.setRole(this, this.state.unitManager, [this.state.web3.eth.accounts[0], parseInt(role, 10)])
   }
 
-  // form submit
+  // form submit: verify commissioned unit
   handlePackageSubmit = () => {
     const { serial, gtin, ph1, ph2 } = this.state
     this.setState({ submittedSerial: serial, submittedGtin: gtin, submittedPh1: ph1, submittedPh2:ph2 })
 
-    // var unitManagerInstance
-
     console.log(this.state.web3)
     client.getHash(this, this.state.unitManager, [this.state.serial, this.state.gtin, this.state.ph1, this.state.ph2])
+    client.verifyCommission(this, this.state.unitManager, this.state.hash)
   }
 
   render () {
@@ -88,7 +74,7 @@ export default class Dispenser extends Component {
 
     return (
       <div className="container">
-        <h1>Packager</h1>
+        <h1>Dispenser</h1>
         <Form onSubmit={this.handleRoleSubmit}>
           <Form.Input label="Role" name="role" value={role} onChange={this.handleChange} />
           <Button type='submit'>Set Role</Button>
@@ -101,7 +87,7 @@ export default class Dispenser extends Component {
           <Button type='submit'>Submit</Button>
         </Form>
         <div className="hash">
-          <p>{this.state.hash}</p>
+          <p>{this.state.commissionExist}</p>
         </div>
       </div>
     )
