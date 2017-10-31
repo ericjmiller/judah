@@ -2,9 +2,9 @@
 export const setRole = (component, contract, roleObj) => {
   contract.deployed()
   .then( (instance) => {
-    console.log(roleObj[0], roleObj[1], 'from: ' + component.state.accountMain)
-    instance.setRole(roleObj[0], roleObj[1], {from: component.state.accountMain})
-    // instance.setRole(roleObj[0], roleObj[1], {from: component.state.web3.eth.accounts[0]})
+    console.log(roleObj[0], roleObj[1], 'from: ' + component.state.activeAccount)
+    // instance.setRole(roleObj[0], roleObj[1], {from: component.state.accountMain})
+    instance.setRole(roleObj[0], roleObj[1], {from: String(component.state.activeAccount)})
     .then( () => {
       instance.getRole(roleObj[0])
       .then( (role) => {
@@ -15,36 +15,43 @@ export const setRole = (component, contract, roleObj) => {
   })
 }
 
-export const getHash = (component, contract, hashObj) => {
-  contract.deployed()
-  .then( (instance) => {
-    console.log('instance: ' + instance)
+//export const getHash = (component, contract, hashobj) => {
+//  contract.deployed()
+//  .then( (instance) => {
+//    console.log('instance: ' + instance)
+//
+//    instance.gethash(hashobj[0], hashobj[1], hashobj[2], hashobj[3], {from: component.state.activeaccount})
+//    .then( hash => {
+//      console.log('hash: ' + hash)
+//      console.log('activeaddress: ' + component.props.activeaccount)
+//      console.log('accounts[0]: ' + component.state.web3.eth.accounts[0])
+//      console.log('contractaddress: ' + contract.address)
+//      component.setstate({hash: hash})
+//    })
+//  })
+//}
 
-    instance.getHash(hashObj[0], hashObj[1], hashObj[2], hashObj[3])
-    .then( hash => {
-      console.log('hash: ' + hash)
-      console.log('activeAddress: ' + component.props.activeAccount)
-      console.log('accounts[0]: ' + component.state.web3.eth.accounts[0])
-      console.log('contractAddress: ' + contract.address)
-      component.setState({hash: hash})
-      instance.commissionUnit(hash, {from: component.state.accountMain})
-      // instance.commissionUnit(hash, {from: component.state.activeAccount})
-      // instance.commissionUnit(hash, {from: component.state.web3.eth.accounts[0]})
-      .then( () => {
-        instance.unitExists(hash)
-        .then( (exists) => {
-          console.log('unitExists: ' + exists)
-        })
+export const getHash = (component, contract, hashobj) => {
+  return new Promise((resolve, reject) => {
+    contract.deployed()
+    .then( (instance) => {
+      console.log('instance: ' + instance)
+      instance.getHash(hashobj[0], hashobj[1], hashobj[2], hashobj[3], {from: component.state.activeAccount})
+      .then( hash => {
+        console.log('hash: ' + hash)
+        console.log('activeAddress: ' + component.state.activeAccount)
+        console.log('accounts[0]: ' + component.state.web3.eth.accounts[0])
+        console.log('contractaddress: ' + contract.address)
+        resolve(component.setState({hash: hash}))
       })
     })
-
   })
 }
 
 export const commissionUnit = (component, contract, hash) => {
   contract.deployed()
   .then( (instance) => {
-    instance.commissionUnit(hash, {from: component.state.accountMain})
+    instance.commissionUnit(hash, {from: String(component.state.activeAccount)})
     .then( () => {
       instance.unitExists(hash)
       .then( (exists) => {
@@ -57,7 +64,7 @@ export const commissionUnit = (component, contract, hash) => {
 export const verifyCommission = (component, contract, hash) => {
   contract.deployed()
   .then( (instance) => {
-    instance.unitExists(hash)
+    instance.unitExists(hash, {from: String(component.state.activeAccount)})
     .then( (exists) => {
       component.setState({commissionExists: exists})
     })

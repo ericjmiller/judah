@@ -66,7 +66,7 @@ export default class Dispenser extends Component {
 
     console.log(this.state.web3)
     client.getHash(this, this.state.unitManager, [this.state.serial, this.state.gtin, this.state.ph1, this.state.ph2])
-    client.verifyCommission(this, this.state.unitManager, this.state.hash)
+    .then(client.verifyCommission(this, this.state.unitManager, this.state.hash))
   }
 
   render () {
