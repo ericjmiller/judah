@@ -27,6 +27,14 @@ contract UnitManager {
     userRole[msg.sender] = Role.Server;
   }
 
+  function hashArrayLength() constant public returns (uint){
+    return hashArray.length;
+  }
+
+  function getHashArray(uint index) public returns (bytes32){
+    return hashArray[index];
+  }
+
   function commissionUnit(bytes32 uid) public {
     if(getRole(msg.sender) == uint(Role.Packager))
     {

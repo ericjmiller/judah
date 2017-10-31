@@ -75,7 +75,10 @@ export const verifyCommission = (component, contract, hash) => {
 export const getHashArray = (component, contract) => {
   contract.deployed()
   .then( instance => {
-    instance.hashArray()
+    instance.hashArrayLength()
+    .then( length => {
+      instance.hashArray(Number(length)-1)
+    })
     .then( res => {
       console.log(res)
       component.setState({hashArray: res})
