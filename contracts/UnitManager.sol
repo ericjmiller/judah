@@ -19,6 +19,7 @@ contract UnitManager {
       address initiator
   );
 
+  bytes32[] public hashArray;
   mapping(bytes32=>Unit) public units;
   mapping(address=>Role) public userRole;
 
@@ -32,6 +33,7 @@ contract UnitManager {
       units[uid].exists = true;
       units[uid].idHash = uid;
       units[uid].custodian = msg.sender;
+      hashArray.push(uid);
         LogEvent("commissioning", uid, units[uid].custodian);
     }
   }
@@ -77,7 +79,7 @@ contract UnitManager {
   }
 
   function getHash(string a, string b,string c, string d) public constant returns(bytes32){
-    return sha3(a,b,c,d);
+    return keccak256(a,b,c,d);
   }
 
   function getRole(address a) public constant returns (uint) {

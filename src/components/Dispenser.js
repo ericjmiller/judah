@@ -21,7 +21,9 @@ export default class Dispenser extends Component {
     submittedRole: '',
     unitManager: null,
     hash: '',
-    accountMain: this.props.accountMain
+    accountMain: this.props.accountMain,
+    activeAccount: this.props.activeAccount,
+    commissionExists: ''
   }
 
   componentWillMount() {
@@ -87,7 +89,7 @@ export default class Dispenser extends Component {
           <Button type='submit'>Submit</Button>
         </Form>
         <div className="hash">
-          <p>{this.state.commissionExist}</p>
+          <p>{String(this.state.commissionExists)}</p>
         </div>
       </div>
     )

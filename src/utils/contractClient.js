@@ -1,7 +1,7 @@
 
 export const setRole = (component, contract, roleObj) => {
   contract.deployed()
-  .then( (instance) => {
+  .then( instance => {
     console.log(roleObj[0], roleObj[1], 'from: ' + component.state.activeAccount)
     // instance.setRole(roleObj[0], roleObj[1], {from: component.state.accountMain})
     instance.setRole(roleObj[0], roleObj[1], {from: String(component.state.activeAccount)})
@@ -34,7 +34,7 @@ export const setRole = (component, contract, roleObj) => {
 export const getHash = (component, contract, hashobj) => {
   return new Promise((resolve, reject) => {
     contract.deployed()
-    .then( (instance) => {
+    .then( instance => {
       console.log('instance: ' + instance)
       instance.getHash(hashobj[0], hashobj[1], hashobj[2], hashobj[3], {from: component.state.activeAccount})
       .then( hash => {
@@ -50,7 +50,7 @@ export const getHash = (component, contract, hashobj) => {
 
 export const commissionUnit = (component, contract, hash) => {
   contract.deployed()
-  .then( (instance) => {
+  .then( instance => {
     instance.commissionUnit(hash, {from: String(component.state.activeAccount)})
     .then( () => {
       instance.unitExists(hash)
@@ -63,10 +63,22 @@ export const commissionUnit = (component, contract, hash) => {
 
 export const verifyCommission = (component, contract, hash) => {
   contract.deployed()
-  .then( (instance) => {
+  .then( instance => {
     instance.unitExists(hash, {from: String(component.state.activeAccount)})
     .then( (exists) => {
+      console.log('exists: ' + exists)
       component.setState({commissionExists: exists})
+    })
+  })
+}
+
+export const getHashArray = (component, contract) => {
+  contract.deployed()
+  .then( instance => {
+    instance.hashArray()
+    .then( res => {
+      console.log(res)
+      component.setState({hashArray: res})
     })
   })
 }
