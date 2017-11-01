@@ -20,6 +20,7 @@ contract UnitManager {
   );
 
   bytes32[] public hashArray;
+  mapping(address=>address[]) public users;
   mapping(bytes32=>Unit) public units;
   mapping(address=>Role) public userRole;
 
@@ -31,7 +32,7 @@ contract UnitManager {
     return hashArray.length;
   }
 
-  function getHashArray(uint index) public returns (bytes32){
+  function getHashArray(uint index) constant public returns (bytes32){
     return hashArray[index];
   }
 
@@ -82,6 +83,7 @@ contract UnitManager {
     if(userRole[msg.sender] == Role.Server) {
       if(number >= uint(Role.None) && number <= uint(Role.Dispensary)) {
         userRole[user] = Role(number);
+        users[msg.sender].push(user);
       }
     }
   }
