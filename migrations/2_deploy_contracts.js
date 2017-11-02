@@ -4,8 +4,12 @@ module.exports = function(deployer) {
   // deployer.deploy(UnitManager)
   let hash = ''
   deployer
-  .then( () => {
-    return UnitManager.new()
+  // .then( () => {
+  //   return UnitManager.new()
+  // })
+  .then( instance => {
+    let x = UnitManager.deployed()
+    return x
   })
   .then( instance => {
     instance.setRole(web3.eth.accounts[1], 3, {from: web3.eth.accounts[0]})
@@ -55,5 +59,8 @@ module.exports = function(deployer) {
         })
       })
     })
+  })
+  .then( () => {
+    console.log('network id: ' + web3.version.network)
   })
 };
