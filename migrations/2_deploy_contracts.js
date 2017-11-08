@@ -3,6 +3,7 @@ var UnitManager = artifacts.require("./UnitManager.sol");
 module.exports = function(deployer) {
   // deployer.deploy(UnitManager)
   let hash = ''
+  let arrayLength = 0
   deployer
   // .then( () => {
   //   return UnitManager.new()
@@ -45,6 +46,16 @@ module.exports = function(deployer) {
         })
       })
     })
+    .then( () => {
+      instance.hashArrayLength()
+      .then( length => {
+        console.log('hashArrayLength: ' + length)
+        instance.getHashArray(length)
+        .then( val => {
+          console.log('array value at ' + arrayLength + ': ' + val)
+        })
+      })
+    })
     return instance
   })
   .then ( instance => {
@@ -59,6 +70,17 @@ module.exports = function(deployer) {
         })
       })
     })
+    .then( () => {
+      instance.hashArrayLength()
+      .then( length => {
+        console.log('hashArrayLength: ' + length)
+        instance.getHashArray(length)
+        .then( val => {
+          console.log('array value at ' + arrayLength + ': ' + val)
+        })
+      })
+    })
+    return instance
   })
   .then( () => {
     console.log('network id: ' + web3.version.network)
