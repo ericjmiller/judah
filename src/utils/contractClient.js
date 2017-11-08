@@ -72,16 +72,31 @@ export const verifyCommission = (component, contract, hash) => {
   })
 }
 
-export const getHashArray = (component, contract) => {
-  contract.deployed()
-  .then( instance => {
-    instance.hashArrayLength()
-    .then( length => {
-      instance.hashArray(Number(length)-1)
+export const getHashArrayLength = (component, contract) => {
+  return new Promise((resolve, reject) => {
+    contract.deployed()
+    .then( instance => {
+      instance.hashArrayLength()
+      .then( len => {
+        console.log('array length: ' + len)
+        resolve(len)
+      })
     })
-    .then( res => {
-      console.log(res)
-      component.setState({hashArray: res})
+  })
+}
+
+export const getHashArray = (component, contract) => {
+  return new Promise((resolve, reject) => {
+    contract.deployed()
+    .then( instance => {
+      instance.hashArrayLength()
+      .then( length => {
+        instance.hashArray(Number(length)-1)
+      })
+      .then( res => {
+        console.log(res)
+        component.setState({hashArray: res})
+      })
     })
   })
 }

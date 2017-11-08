@@ -8,7 +8,7 @@ export default class Manufacturer extends Component {
   state = {
     web3: '',
     unitManager: null,
-    hashArray: []
+    hashArray: [],
   }
 
   componentWillMount() {
@@ -20,7 +20,16 @@ export default class Manufacturer extends Component {
 
 
       this.instantiateContract()
-      client.getHashArray(this, this.state.unitManager)
+      //client.getHashArray(this, this.state.unitManager)
+      client.getHashArrayLength(this, this.state.unitManager)
+      .then( len => {
+        this.setState({arrayLength: len.toString(10)})
+      })
+      .then( len => {
+        for(let i = 0; i < len; i++) {
+          
+        }
+      })
     })
     .catch(() => {
       console.log('Error finding web3.')
@@ -37,9 +46,10 @@ export default class Manufacturer extends Component {
 
   render () {
     return (
-      <div className="container">
+      <div className="ui main text container">
         <h1>Manufacturer</h1>
         <p>{this.state.hashArray}</p>
+        <p>{this.state.arrayLength}</p>
       </div>
     )
   }

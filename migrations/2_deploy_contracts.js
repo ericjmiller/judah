@@ -43,16 +43,14 @@ module.exports = function(deployer) {
         instance.unitExists(hash, {from: web3.eth.accounts[0]})
         .then( exists => {
           console.log('unit exists: ' + exists)
-        })
-      })
-    })
-    .then( () => {
-      instance.hashArrayLength()
-      .then( length => {
-        console.log('hashArrayLength: ' + length)
-        instance.getHashArray(length)
-        .then( val => {
-          console.log('array value at ' + arrayLength + ': ' + val)
+          instance.hashArrayLength()
+          .then( length => {
+            console.log('hashArrayLength: ' + length)
+            instance.getHashArray(0)
+            .then( val => {
+              console.log('array value at 0: ' + val)
+            })
+          })
         })
       })
     })
@@ -67,16 +65,14 @@ module.exports = function(deployer) {
         instance.unitExists(hash, {from: web3.eth.accounts[0]})
         .then( exists => {
           console.log('unit exists: ' + exists)
-        })
-      })
-    })
-    .then( () => {
-      instance.hashArrayLength()
-      .then( length => {
-        console.log('hashArrayLength: ' + length)
-        instance.getHashArray(length)
-        .then( val => {
-          console.log('array value at ' + arrayLength + ': ' + val)
+          instance.hashArrayLength()
+          .then( length => {
+            console.log('hashArrayLength: ' + length)
+            instance.getHashArray(1)
+            .then( val => {
+              console.log('array value at 1: ' + val)
+            })
+          })
         })
       })
     })
