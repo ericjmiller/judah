@@ -85,17 +85,14 @@ export const getHashArrayLength = (component, contract) => {
   })
 }
 
-export const getHashArray = (component, contract) => {
+export const getHashArrayValue = (component, contract, index) => {
   return new Promise((resolve, reject) => {
     contract.deployed()
     .then( instance => {
-      instance.hashArrayLength()
-      .then( length => {
-        instance.hashArray(Number(length)-1)
-      })
-      .then( res => {
-        console.log(res)
-        component.setState({hashArray: res})
+      instance.getHashArray(index)
+      .then( val =>  {
+        console.log('index: ' + index + '  ;  value: ' + val)
+        resolve(val)
       })
     })
   })
