@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Header, Icon } from 'semantic-ui-react'
 
 // import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
@@ -99,8 +100,16 @@ class App extends Component {
           activeItem={this.state.activeItem}
         />
 
-        <div className="ui main text container">
-          <p>{this.state.activeAccount}</p>
+        <div className="container">
+          <Header as='h2' block color="blue">
+            <Icon name='chain' />
+            <Header.Content>
+              Current Address
+              <Header.Subheader>
+                {this.state.activeAccount}
+              </Header.Subheader>
+            </Header.Content>
+          </Header>
         </div>
         <div>
           {this.state.activeScreen}

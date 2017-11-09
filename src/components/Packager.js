@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form, Icon, Header } from 'semantic-ui-react'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
@@ -56,12 +56,12 @@ export default class Dispenser extends Component {
 
   // set role: should only be set to 3 (packager) in this component
   // TODO: force role to packager or restrict input
-  handleRoleSubmit = () => {
-    const { address, role } = this.state
-    this.setState({submittedAddress: address, submittedRole: role})
-
-    client.setRole(this, this.state.unitManager, [address, parseInt(role, 10)])
-  }
+  // handleRoleSubmit = () => {
+  //   const { address, role } = this.state
+  //   this.setState({submittedAddress: address, submittedRole: role})
+  //
+  //   client.setRole(this, this.state.unitManager, [address, parseInt(role, 10)])
+  // }
 
   // form submit: commission unit
   handlePackageSubmit = () => {
@@ -78,13 +78,13 @@ export default class Dispenser extends Component {
     const { serial, gtin, ph1, ph2, address, role } = this.state
 
     return (
-      <div className="container">
-        <h1>Packager</h1>
-        <Form onSubmit={this.handleRoleSubmit}>
-          <Form.Input label="Address" name="address" value={address} onChange={this.handleChange} />
-          <Form.Input label="Role" name="role" value={role} onChange={this.handleChange} />
-          <Button type='submit'>Set Role</Button>
-        </Form>
+      <div className="ui main text container">
+        <Header as='h2' icon textAlign='center'>
+          <Icon name='qrcode' circular />
+          <Header.Content>
+            Packager
+          </Header.Content>
+        </Header>
         <Form onSubmit={this.handlePackageSubmit}>
           <Form.Input label="Serial Number" name="serial" value={serial} onChange={this.handleChange} />
           <Form.Input label="GTIN" name="gtin" value={gtin} onChange={this.handleChange} />

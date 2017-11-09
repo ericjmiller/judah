@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Grid, Segment, Divider } from 'semantic-ui-react'
+import { Table, Grid, Segment, Divider, Icon, Header } from 'semantic-ui-react'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
@@ -77,7 +77,15 @@ export default class Manufacturer extends Component {
     return (
       <div>
         <div className="ui text main container">
-          <h1>Manufacturer</h1>
+
+          <Header as='h2' icon textAlign='center'>
+            <Icon name='factory' circular />
+            <Header.Content>
+              Manufacturer
+            </Header.Content>
+          </Header>
+
+
         </div>
         <Grid columns={2} relaxed>
           <Grid.Column>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Form } from 'semantic-ui-react'
+import { Button, Form, Icon, Header } from 'semantic-ui-react'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
@@ -54,12 +54,12 @@ export default class Dispenser extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
   // set role: should only be set to 5 (dispensary) in this component
-  handleRoleSubmit = () => {
-    const { role } = this.state
-    this.setState({submittedRole: role})
-
-    client.setRole(this, this.state.unitManager, [this.state.web3.eth.accounts[0], parseInt(role, 10)])
-  }
+  // handleRoleSubmit = () => {
+  //   const { role } = this.state
+  //   this.setState({submittedRole: role})
+  //
+  //   client.setRole(this, this.state.unitManager, [this.state.web3.eth.accounts[0], parseInt(role, 10)])
+  // }
 
   // form submit: verify commissioned unit
   handlePackageSubmit = () => {
@@ -75,12 +75,14 @@ export default class Dispenser extends Component {
     const { serial, gtin, ph1, ph2, role } = this.state
 
     return (
-      <div className="container">
-        <h1>Dispenser</h1>
-        <Form onSubmit={this.handleRoleSubmit}>
-          <Form.Input label="Role" name="role" value={role} onChange={this.handleChange} />
-          <Button type='submit'>Set Role</Button>
-        </Form>
+      <div className="ui text main container">
+        <Header as='h2' icon textAlign='center'>
+          <Icon name='barcode' circular />
+          <Header.Content>
+            Dispenser
+          </Header.Content>
+        </Header>
+
         <Form onSubmit={this.handlePackageSubmit}>
           <Form.Input label="Serial Number" name="serial" value={serial} onChange={this.handleChange} />
           <Form.Input label="GTIN" name="gtin" value={gtin} onChange={this.handleChange} />
