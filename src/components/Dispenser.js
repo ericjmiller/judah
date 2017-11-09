@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Form, Icon, Header } from 'semantic-ui-react'
+import UnitForm from '../forms/unitForm'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
@@ -23,7 +24,8 @@ export default class Dispenser extends Component {
     hash: '',
     accountMain: this.props.accountMain,
     activeAccount: this.props.activeAccount,
-    commissionExists: ''
+    commissionExists: '',
+    unitForm: null
   }
 
   componentWillMount() {
@@ -45,30 +47,9 @@ export default class Dispenser extends Component {
     const contract = require('truffle-contract')
     const unitManager = contract(UnitManager)
     unitManager.setProvider(this.state.web3.currentProvider)
-
     this.setState({unitManager: unitManager})
-  }
 
-
-  // form field changes
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
-
-  // set role: should only be set to 5 (dispensary) in this component
-  // handleRoleSubmit = () => {
-  //   const { role } = this.state
-  //   this.setState({submittedRole: role})
-  //
-  //   client.setRole(this, this.state.unitManager, [this.state.web3.eth.accounts[0], parseInt(role, 10)])
-  // }
-
-  // form submit: verify commissioned unit
-  handlePackageSubmit = () => {
-    const { serial, gtin, ph1, ph2 } = this.state
-    this.setState({ submittedSerial: serial, submittedGtin: gtin, submittedPh1: ph1, submittedPh2:ph2 })
-
-    console.log(this.state.web3)
-    client.getHash(this, this.state.unitManager, [this.state.serial, this.state.gtin, this.state.ph1, this.state.ph2])
-    .then(client.verifyCommission(this, this.state.unitManager, this.state.hash))
+    this.setState({unitForm: (<UnitForm unitManager={this.state.unitManager} web3={this.state.web3} activeAccount={this.state.activeAccount} verify={true} />) })
   }
 
   render () {
@@ -82,17 +63,7 @@ export default class Dispenser extends Component {
             Dispenser
           </Header.Content>
         </Header>
-
-        <Form onSubmit={this.handlePackageSubmit}>
-          <Form.Input label="Serial Number" name="serial" value={serial} onChange={this.handleChange} />
-          <Form.Input label="GTIN" name="gtin" value={gtin} onChange={this.handleChange} />
-          <Form.Input label="PH1" name="ph1" value={ph1} onChange={this.handleChange} />
-          <Form.Input label="PH2" name="ph2" value={ph2} onChange={this.handleChange} />
-          <Button type='submit'>Submit</Button>
-        </Form>
-        <div className="hash">
-          <p>{String(this.state.commissionExists)}</p>
-        </div>
+        {this.state.unitForm}
       </div>
     )
   }

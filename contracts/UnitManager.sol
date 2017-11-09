@@ -13,6 +13,13 @@ contract UnitManager {
     bool exists;
   }
 
+  /*struct Package {
+    string lotNumber;
+    string serialNumber;
+    string gtin;
+    string expiryDate;
+  }*/
+
   event LogEvent(
       string eventType,
       bytes32 indexed _idHash,
@@ -23,6 +30,7 @@ contract UnitManager {
   mapping(address=>address[]) public users;
   mapping(bytes32=>Unit) public units;
   mapping(address=>Role) public userRole;
+  /*mapping(bytes32=>Package) private packages;*/
 
   function UnitManager() {
     userRole[msg.sender] = Role.Server;
@@ -90,18 +98,27 @@ contract UnitManager {
   }
 
   function getHash(string a, string b,string c, string d) public constant returns(bytes32){
+    /*bytes32 hashValue = keccak256(a, b, c, d);
+    storePackage(hashValue, a, b, c, d);*/
     return keccak256(a,b,c,d);
   }
+
+  /*function storePackage(bytes32 uid, string ln, string sn, string gt, string ed) private returns (bool){
+    packages[uid].lotNumber = ln;
+    packages[uid].serialNumber = sn;
+    packages[uid].gtin = gt;
+    packages[uid].expiryDate = ed;
+    return true;
+  }
+
+  function getPackage(bytes32 uid) public constant returns (string, string, string, string){
+    if(userRole[msg.sender] == Role.Server) {
+      return (packages[uid].lotNumber, packages[uid].serialNumber, packages[uid].gtin, packages[uid].expiryDate);
+    }
+  }*/
 
   function getRole(address a) public constant returns (uint) {
     return uint(userRole[a]);
   }
-
-
-
-
-
-
-
 
 }

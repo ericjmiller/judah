@@ -64,12 +64,13 @@ export const commissionUnit = (component, contract, hash) => {
 }
 
 export const verifyCommission = (component, contract, hash) => {
-  contract.deployed()
-  .then( instance => {
-    instance.unitExists(hash, {from: String(component.state.activeAccount)})
-    .then( (exists) => {
-      console.log('exists: ' + exists)
-      component.setState({commissionExists: exists})
+  return new Promise((resolve, reject) => {
+    contract.deployed()
+    .then( instance => {
+      instance.unitExists(hash, {from: String(component.state.activeAccount)})
+      .then( (exists) => {
+        resolve(component.setState({verifyResults: exists.toString()}))
+      })
     })
   })
 }
