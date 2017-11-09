@@ -42,6 +42,7 @@ contract UnitManager {
       units[uid].exists = true;
       units[uid].idHash = uid;
       units[uid].custodian = msg.sender;
+      units[uid].unitStatus = Status.Pending;
       hashArray.push(uid);
         LogEvent("commissioning", uid, units[uid].custodian);
     }

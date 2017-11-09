@@ -49,12 +49,14 @@ export const getHash = (component, contract, hashobj) => {
 }
 
 export const commissionUnit = (component, contract, hash) => {
+  console.log('hash sent to function: ' + hash)
   contract.deployed()
   .then( instance => {
     instance.commissionUnit(hash, {from: String(component.state.activeAccount)})
     .then( () => {
       instance.unitExists(hash)
       .then( (exists) => {
+        console.log('hash sent: ' + hash)
         console.log('unitExists: ' + exists)
       })
     })
@@ -93,6 +95,19 @@ export const getHashArrayValue = (component, contract, index) => {
       .then( val =>  {
         console.log('index: ' + index + '  ;  value: ' + val)
         resolve(val)
+      })
+    })
+  })
+}
+
+export const getUnitValue = (component, contract, hash) => {
+  return new Promise((resolve, reject) => {
+    contract.deployed()
+    .then( instance => {
+      instance.units(hash)
+      .then( res => {
+        console.log(res)
+        resolve(res)
       })
     })
   })

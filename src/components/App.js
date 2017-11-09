@@ -17,7 +17,8 @@ class App extends Component {
     activeItem: null,
     activeScreen: null,
     activeAccount: null,
-    accountMain: "0x960e5Be89BdAC0a428153622901BCECb3EcF952A"
+    accountMain: "0x960e5Be89BdAC0a428153622901BCECb3EcF952A",
+    intervalId: 0
   }
 
   componentWillMount() {
@@ -29,11 +30,13 @@ class App extends Component {
       })
 
       // must constantly query metamask because it doesn't automatically update
-      setInterval( () => {
-        results.web3.eth.getAccounts( (err, res) => {
-          this.setState({activeAccount: res})
-        })
-      }, 1000)
+      this.setState({
+        intervalId: setInterval( () => {
+                      results.web3.eth.getAccounts( (err, res) => {
+                        this.setState({activeAccount: res})
+                      })
+                    }, 1000)
+      })
 
       this.instantiateContract()
     })
@@ -43,7 +46,7 @@ class App extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.activeAccount2)
+    clearInterval(this.state.intervalId)
   }
 
   instantiateContract() {
@@ -99,7 +102,7 @@ class App extends Component {
         <div className="ui main text container">
           <p>{this.state.activeAccount}</p>
         </div>
-        <div className="ui main text container">
+        <div>
           {this.state.activeScreen}
         </div>
       </div>
