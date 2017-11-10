@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { Button, Form, Icon, Header } from 'semantic-ui-react'
+import { Icon, Header } from 'semantic-ui-react'
 import UnitForm from '../forms/unitForm'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
-import * as client from '../utils/contractClient.js'
 
 
 export default class Dispenser extends Component {
@@ -24,7 +23,6 @@ export default class Dispenser extends Component {
         web3: results.web3,
       })
 
-
       this.instantiateContract()
     })
     .catch(() => {
@@ -39,12 +37,15 @@ export default class Dispenser extends Component {
     this.setState({unitManager: unitManager})
 
     // setup unit form after all web3 variables are set
-    this.setState({unitForm: (<UnitForm unitManager={this.state.unitManager} web3={this.state.web3} activeAccount={this.state.activeAccount} verify={false} />) })
+    this.setState({unitForm: (<UnitForm
+                                unitManager={this.state.unitManager}
+                                web3={this.state.web3}
+                                activeAccount={this.state.activeAccount}
+                                verify={false}
+                              />) })
   }
 
   render () {
-    const { serial, gtin, ph1, ph2, address, role } = this.state
-
     return (
       <div className="ui main text container">
         <Header as='h2' icon textAlign='center'>

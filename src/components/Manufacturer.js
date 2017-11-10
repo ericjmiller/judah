@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Grid, Segment, Divider, Icon, Header } from 'semantic-ui-react'
+import UnitForm from '../forms/unitForm'
 
 import UnitManager from '../../build/contracts/UnitManager.json'
 import getWeb3 from '../utils/getWeb3'
@@ -13,7 +14,8 @@ export default class Manufacturer extends Component {
     table: [],
     unitArray: [],
     status: ["Pending", "Active", "Transit", "Dispensed" ],
-    gridText: ''
+    gridText: '',
+    unitForm: null
   }
 
   componentWillMount() {
@@ -67,6 +69,13 @@ export default class Manufacturer extends Component {
     unitManager.setProvider(this.state.web3.currentProvider)
 
     this.setState({unitManager: unitManager})
+
+    this.setState({unitForm: (<UnitForm
+                                unitManager={this.state.unitManager}
+                                web3={this.state.web3}
+                                activeAccount={this.state.activeAccount}
+                                verify={false}
+                              />) })
   }
 
   rowClick = (val) => {
@@ -77,15 +86,12 @@ export default class Manufacturer extends Component {
     return (
       <div>
         <div className="ui text main container">
-
           <Header as='h2' icon textAlign='center'>
             <Icon name='factory' circular />
             <Header.Content>
               Manufacturer
             </Header.Content>
           </Header>
-
-
         </div>
         <Grid columns={2} relaxed>
           <Grid.Column>
@@ -98,16 +104,18 @@ export default class Manufacturer extends Component {
                     <Table.HeaderCell>Custodian</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
-
                 <Table.Body className="hashTable">
                   {this.state.table}
                 </Table.Body>
               </Table>
+              <h1>{this.state.gridText}</h1>
             </Segment>
           </Grid.Column>
           <Divider vertical>Or</Divider>
           <Grid.Column>
-            <h1>{this.state.gridText}</h1>
+            <Segment basic>
+              {this.state.unitForm}
+            </Segment>
           </Grid.Column>
         </Grid>
       </div>

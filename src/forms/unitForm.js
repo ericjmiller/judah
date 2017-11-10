@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import { Button, Form } from 'semantic-ui-react'
 
-import UnitManager from '../../build/contracts/UnitManager.json'
-import getWeb3 from '../utils/getWeb3'
 import * as client from '../utils/contractClient.js'
 
 
 export default class UnitForm extends Component {
   state = {
+    serial: '',
+    submittedSerial: '',
+    gtin: '',
+    submittedGtin: '',
+    ph1: '',
+    submittedPh1: '',
+    ph2: '',
+    submittedPh2: '',
     hash: '',
     unitManager: this.props.unitManager,
     web3: this.props.web3,
@@ -22,6 +28,7 @@ export default class UnitForm extends Component {
     const { serial, gtin, ph1, ph2 } = this.state
     this.setState({ submittedSerial: serial, submittedGtin: gtin, submittedPh1: ph1, submittedPh2:ph2 })
 
+    // is this is a new commission or simply verification?
     if(this.state.verify) {
       client.getHash(this, this.state.unitManager, [this.state.serial, this.state.gtin, this.state.ph1, this.state.ph2])
       .then( () => client.verifyCommission(this, this.state.unitManager, this.state.hash))
@@ -35,7 +42,8 @@ export default class UnitForm extends Component {
     const { serial, gtin, ph1, ph2 } = this.state
 
     return (
-      <div className="unitForm">
+      <div className="ui main text container">
+        <h2>Unit Form:</h2>
         <Form onSubmit={this.handlePackageSubmit}>
           <Form.Input label="Serial Number" name="serial" value={serial} onChange={this.handleChange} />
           <Form.Input label="GTIN" name="gtin" value={gtin} onChange={this.handleChange} />
@@ -45,7 +53,7 @@ export default class UnitForm extends Component {
         </Form>
         <div className="hash">
           <p>{this.state.hash}</p>
-          <p>Exists: {this.state.verifyResults}</p>
+          <p>{this.state.verifyResults}</p>
         </div>
       </div>
     )
