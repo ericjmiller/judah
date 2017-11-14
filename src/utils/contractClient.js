@@ -63,6 +63,39 @@ export const commissionUnit = (component, contract, hash) => {
   })
 }
 
+export const shipUnit = (component, contract, hash) => {
+  console.log('hash sent to function: ' + hash)
+  contract.deployed()
+  .then( instance => {
+    instance.shipUnit(hash, {from: String(component.state.activeAccount)})
+    .then( () => {
+      console.log('shipUnit complete')
+    })
+  })
+}
+
+export const receiveUnit = (component, contract, hash) => {
+  console.log('hash sent to function: ' + hash)
+  contract.deployed()
+  .then( instance => {
+    instance.receiveUnit(hash, {from: String(component.state.activeAccount)})
+    .then( () => {
+      console.log('shipUnit complete')
+    })
+  })
+}
+
+export const dispenseUnit = (component, contract, hash) => {
+  console.log('hash sent to function: ' + hash)
+  contract.deployed()
+  .then( instance => {
+    instance.dispenseUnit(hash, {from: String(component.state.activeAccount)})
+    .then( () => {
+      console.log('shipUnit complete')
+    })
+  })
+}
+
 export const verifyCommission = (component, contract, hash) => {
   return new Promise((resolve, reject) => {
     contract.deployed()

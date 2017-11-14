@@ -65,7 +65,7 @@ contract UnitManager {
   }
 
   function shipUnit(bytes32 uid) public {
-    if(units[uid].unitStatus == Status.Active && units[uid].custodian == msg.sender) {
+    if((units[uid].unitStatus == Status.Pending || units[uid].unitStatus == Status.Active) && units[uid].custodian == msg.sender) {
       if(userRole[msg.sender] != Role.None && userRole[msg.sender] != Role.Dispensary) {
         units[uid].unitStatus = Status.Transit;
         LogEvent("shipping", uid, units[uid].custodian);
@@ -82,7 +82,7 @@ contract UnitManager {
   }
 
   function dispenseUnit(bytes32 uid) public {
-    if(units[uid].unitStatus == Status.Active && userRole[msg.sender] == Role.Dispensary && units[uid].custodian == msg.sender) {
+    if(units[uid].unitStatus == Status.Active && userRole[msg.sender] == Role.Dispensary) {
       units[uid].unitStatus = Status.Dispensed;
       LogEvent("dispensing", uid, msg.sender);
     }

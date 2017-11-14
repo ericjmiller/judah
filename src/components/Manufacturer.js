@@ -15,7 +15,9 @@ export default class Manufacturer extends Component {
     unitArray: [],
     status: ["Pending", "Active", "Transit", "Dispensed" ],
     gridText: '',
-    unitForm: null
+    unitForm: null,
+    accountMain: this.props.accountMain,
+    activeAccount: this.props.activeAccount,
   }
 
   componentWillMount() {
